@@ -96,7 +96,7 @@ public class FcmService extends FirebaseMessagingService {
         }
 
         log.append("\n\nNORMALIZED PAYLOAD JSON (Android SDK view):\n")
-                 .append(prettyJson(toNormalizedJson(remoteMessage)));
+                .append(prettyJson(toNormalizedJson(remoteMessage)));
 
         boolean silent = isTruthy(data.get("silent"))
                 || isFalsey(data.get("show_notification"));
@@ -144,6 +144,14 @@ public class FcmService extends FirebaseMessagingService {
             // JSONObject failures are non-fatal for the tester.
         }
         return root;
+    }
+
+    private static String prettyJson(JSONObject object) {
+        try {
+            return object.toString(2);
+        } catch (Exception ignored) {
+            return object.toString();
+        }
     }
 
     private Bitmap downloadImage(String imageUrl) {
