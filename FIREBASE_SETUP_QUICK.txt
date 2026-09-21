@@ -1,13 +1,33 @@
-FCM TESTER - FAST SETUP
+FCM TESTER PRO - QUICK SETUP
+============================
 
-1) Firebase Console -> Project settings -> Your apps -> Add Android app.
-2) Use package name com.example.fcmtester (or any valid package).
-3) Download google-services.json.
-4) Upload this project to a GitHub repository.
-5) GitHub repo -> Settings -> Secrets and variables -> Actions -> New repository secret.
-6) Secret name: GOOGLE_SERVICES_JSON
-7) Secret value: paste the ENTIRE google-services.json contents.
-8) Repo -> Actions -> Build FCM Tester APK -> Run workflow.
-9) Download FCMTester-debug.apk from the completed run.
-10) Install APK, open it, allow notifications, copy the FCM token.
-11) Firebase Console -> Messaging -> Send test message -> paste token.
+REUSE YOUR EXISTING FIREBASE APP + GITHUB SECRET.
+
+1) Replace your repo files with this FCM Tester Pro project.
+2) Keep the existing GitHub Actions secret:
+       GOOGLE_SERVICES_JSON
+3) Check that this file exists in GitHub:
+       .github/workflows/build-apk.yml
+4) GitHub -> Actions -> Build FCM Tester Pro APK -> Run workflow
+5) Open the successful run -> Artifacts -> FCMTester-Pro-debug-apk
+6) Extract FCMTester-Pro-debug.apk and install it.
+
+IF ANDROID REFUSES TO INSTALL OVER THE OLD TESTER:
+Uninstall the old FCM Tester once, then install FCM Tester Pro.
+The new install will generate a new FCM token.
+
+TEST FEATURES IN THE APK:
+- Copy FCM token
+- Subscribe/unsubscribe topics
+- View normalized JSON payloads
+- data-only + silent messages
+- image notification URL
+- deep_link=fcmtester://...
+- sound=custom
+- Android clickAction=OPEN_FCM_TEST
+
+OPTIONAL NODE SENDER:
+See node-server/README.md
+Put your Firebase Admin service account at:
+    node-server/service-account.json
+Never commit that private key.

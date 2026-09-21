@@ -7,7 +7,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_app"
-        android:label="FCM Tester"
+        android:label="FCM Tester Pro"
         android:theme="@style/AppTheme">
 
         <activity
@@ -17,6 +17,20 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Test android.notification.clickAction = OPEN_FCM_TEST -->
+            <intent-filter>
+                <action android:name="OPEN_FCM_TEST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- Test app deep links like fcmtester://message/1234 -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="fcmtester" />
             </intent-filter>
         </activity>
 

@@ -1,0 +1,14 @@
+{
+  "name": "fcm-tester-pro-node",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Small Express + Firebase Admin sender for FCM Tester Pro",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "firebase-admin": "^13.5.0"
+  }
+}
