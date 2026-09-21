@@ -1,0 +1,13 @@
+FCM TESTER - FAST SETUP
+
+1) Firebase Console -> Project settings -> Your apps -> Add Android app.
+2) Use package name com.example.fcmtester (or any valid package).
+3) Download google-services.json.
+4) Upload this project to a GitHub repository.
+5) GitHub repo -> Settings -> Secrets and variables -> Actions -> New repository secret.
+6) Secret name: GOOGLE_SERVICES_JSON
+7) Secret value: paste the ENTIRE google-services.json contents.
+8) Repo -> Actions -> Build FCM Tester APK -> Run workflow.
+9) Download FCMTester-debug.apk from the completed run.
+10) Install APK, open it, allow notifications, copy the FCM token.
+11) Firebase Console -> Messaging -> Send test message -> paste token.
