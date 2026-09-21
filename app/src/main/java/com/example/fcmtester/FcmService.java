@@ -96,7 +96,7 @@ public class FcmService extends FirebaseMessagingService {
         }
 
         log.append("\n\nNORMALIZED PAYLOAD JSON (Android SDK view):\n")
-                .append(toNormalizedJson(remoteMessage).toString(2));
+                 .append(prettyJson(toNormalizedJson(remoteMessage)));
 
         boolean silent = isTruthy(data.get("silent"))
                 || isFalsey(data.get("show_notification"));
