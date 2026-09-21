@@ -1,4 +1,4 @@
-name: Build FCM Tester APK
+name: Build FCM Tester Pro APK
 
 on:
   workflow_dispatch:
@@ -30,6 +30,15 @@ jobs:
         with:
           gradle-version: '9.6.0'
           cache-provider: basic
+
+      # Keeps the debug signing key stable across builds in this repository when
+      # the cache is available. The first Pro APK may still have a different
+      # signature from an older project build, so uninstall that older APK once.
+      - name: Restore test debug signing key
+        uses: actions/cache@v5
+        with:
+          path: ~/.android/debug.keystore
+          key: fcm-tester-pro-debug-keystore-v1
 
       - name: Create Firebase config and detect package name
         env:
@@ -64,11 +73,11 @@ jobs:
         run: gradle --no-daemon :app:assembleDebug
 
       - name: Prepare APK
-        run: cp app/build/outputs/apk/debug/app-debug.apk FCMTester-debug.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk FCMTester-Pro-debug.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v7
         with:
-          path: FCMTester-debug.apk
-          archive: false
+          name: FCMTester-Pro-debug-apk
+          path: FCMTester-Pro-debug.apk
           retention-days: 30
