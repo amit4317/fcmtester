@@ -22,23 +22,28 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      # v3 used to request the removed Android SDK "tools" package by default.
+      # v4 fixes that behavior. packages: '' prevents the action from installing
+      # any optional SDK packages; we install only the exact ones needed below.
+      - name: Set up Android SDK command-line tools
+        uses: android-actions/setup-android@v4
+        with:
+          packages: ''
+          log-accepted-android-sdk-licenses: 'false'
 
-      - name: Install Android SDK 36
+      - name: Install required Android SDK packages
         shell: bash
         run: |
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          set -euo pipefail
+          sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          sdkmanager --list_installed | grep -E 'platform-tools|platforms;android-36|build-tools;36.0.0' || true
 
       - name: Set up Gradle 9.6
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.6.0'
 
-      # Keep the same debug signing certificate for later builds whenever the
-      # cache is available. If you installed an older APK signed by another
-      # certificate, uninstall that older copy once before installing this one.
       - name: Restore stable test signing key
         uses: actions/cache@v4
         with:
@@ -108,6 +113,10 @@ jobs:
           ZIPALIGN="$ANDROID_HOME/build-tools/36.0.0/zipalign"
           AAPT="$ANDROID_HOME/build-tools/36.0.0/aapt"
 
+          test -x "$APKSIGNER"
+          test -x "$ZIPALIGN"
+          test -x "$AAPT"
+
           "$APKSIGNER" verify --verbose --print-certs FCMTester.apk
           "$ZIPALIGN" -c -v 4 FCMTester.apk
           "$AAPT" dump badging FCMTester.apk | head -20
@@ -122,8 +131,6 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      # GitHub Actions artifacts download as a ZIP. A GitHub Release asset is a
-      # real .apk download, so this also publishes FCMTester.apk directly.
       - name: Publish direct APK download in GitHub Releases
         if: github.event_name != 'pull_request'
         env:
@@ -139,13 +146,13 @@ jobs:
             FCMTester.apk.sha256 \
             --target "$GITHUB_SHA" \
             --title "$TITLE" \
-            --notes "Installable FCM Tester APK. If Android reports the package is invalid while an older FCM Tester is already installed, uninstall the older copy once and install this APK again; the older APK may have been signed by a different debug certificate."
+            --notes "Installable FCM Tester APK. Download FCMTester.apk from the release Assets section. If an older build with the same package name was signed by a different key, uninstall that older copy once before installing this one."
 
           RELEASE_URL="$(gh release view "$TAG" --json url -q .url)"
           {
             echo "## Final APK"
             echo
-            echo "The APK was validated with apksigner and zipalign."
+            echo "APK validation passed with apksigner, zipalign, and aapt."
             echo
             echo "Release: $RELEASE_URL"
             echo
