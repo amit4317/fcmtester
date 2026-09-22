@@ -1,6 +1,6 @@
 # FCM Tester Pro APK — no Android Studio required
 
-A small Android app for testing Firebase Cloud Messaging against **your own Firebase project**. It is designed to build completely in GitHub Actions.
+A small Android app for testing Firebase Cloud Messaging against **your own Firebase project**. It is designed to build completely in GitHub Actions. +1
 
 ## What this version tests
 
